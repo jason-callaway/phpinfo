@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  creationTimestamp: 2015-11-30T19:23:03Z
+  labels:
+    name: phpinfo
+  name: phpinfo
+  namespace: phpinfo
+  resourceVersion: "80470"
+  selfLink: /oapi/v1/namespaces/phpinfo/routes/phpinfo
+  uid: c68a64b5-9797-11e5-80c0-0e9114658be7
+spec:
+  host: phpinfo-phpinfo.apps.demo.rhtps.io
+  to:
+    kind: Service
+    name: phpinfo
+status: {}

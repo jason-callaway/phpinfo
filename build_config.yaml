@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: BuildConfig
+metadata:
+  creationTimestamp: 2015-11-30T19:13:13Z
+  labels:
+    app: phpinfo
+  name: phpinfo
+  namespace: phpinfo
+  resourceVersion: "80125"
+  selfLink: /oapi/v1/namespaces/phpinfo/buildconfigs/phpinfo
+  uid: 6725b55b-9796-11e5-80c0-0e9114658be7
+spec:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: phpinfo:latest
+  resources: {}
+  source:
+    git:
+      uri: https://github.com/jason-callaway/phpinfo.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: ImageStreamTag
+        name: php:5.6-apache
+    type: Docker
+  triggers:
+  - github:
+      secret: Vu_hs4Ckw3iPHdWX59ol
+    type: GitHub
+  - generic:
+      secret: a2jz9vwOmL4j_M18ylmE
+    type: Generic
+  - type: ConfigChange
+  - imageChange:
+      lastTriggeredImageID: library/php@sha256:6a7f8ba6dc6a7136d79375d3fa0110ce3ee8edf53ea05577a8def5a9cbeff3c1
+    type: ImageChange
+status:
+  lastVersion: 2
