@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  annotations:
+    openshift.io/deployer-pod.name: phpinfo-2-deploy
+    openshift.io/deployment-config.latest-version: "2"
+    openshift.io/deployment-config.name: phpinfo
+    openshift.io/deployment.phase: Complete
+    openshift.io/encoded-deployment-config: '{"kind":"DeploymentConfig","apiVersion":"v1","metadata":{"name":"phpinfo","namespace":"phpinfo","selfLink":"/oapi/v1/namespaces/phpinfo/deploymentconfigs/phpinfo","uid":"67278ec8-9796-11e5-80c0-0e9114658be7","resourceVersion":"80877","creationTimestamp":"2015-11-30T19:13:13Z","labels":{"app":"phpinfo"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{}},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["phpinfo"],"from":{"kind":"ImageStreamTag","name":"phpinfo:latest"},"lastTriggeredImage":"172.30.77.67:5000/phpinfo/phpinfo@sha256:fa75465813e2ab8bdcd1e20662057913b59b1f42cf97404e28977c0bd97b532e"}}],"replicas":1,"selector":{"app":"phpinfo","deploymentconfig":"phpinfo"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"phpinfo","deploymentconfig":"phpinfo"}},"spec":{"containers":[{"name":"phpinfo","image":"172.30.77.67:5000/phpinfo/phpinfo@sha256:fa75465813e2ab8bdcd1e20662057913b59b1f42cf97404e28977c0bd97b532e","ports":[{"containerPort":80,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","imagePullPolicy":"Always"}],"restartPolicy":"Always","dnsPolicy":"ClusterFirst"}}},"status":{"latestVersion":2,"details":{"causes":[{"type":"ImageChange","imageTrigger":{"from":{"kind":"DockerImage","name":"172.30.77.67:5000/phpinfo/phpinfo:latest"}}}]}}}'
+  creationTimestamp: 2015-11-30T19:38:50Z
+  generation: 2
+  labels:
+    app: phpinfo
+    openshift.io/deployment-config.name: phpinfo
+  name: phpinfo-2
+  namespace: phpinfo
+  resourceVersion: "80933"
+  selfLink: /api/v1/namespaces/phpinfo/replicationcontrollers/phpinfo-2
+  uid: fb02d46b-9799-11e5-80c0-0e9114658be7
+spec:
+  replicas: 1
+  selector:
+    app: phpinfo
+    deployment: phpinfo-2
+    deploymentconfig: phpinfo
+  template:
+    metadata:
+      annotations:
+        openshift.io/deployment-config.latest-version: "2"
+        openshift.io/deployment-config.name: phpinfo
+        openshift.io/deployment.name: phpinfo-2
+      creationTimestamp: null
+      labels:
+        app: phpinfo
+        deployment: phpinfo-2
+        deploymentconfig: phpinfo
+    spec:
+      containers:
+      - image: 172.30.77.67:5000/phpinfo/phpinfo@sha256:fa75465813e2ab8bdcd1e20662057913b59b1f42cf97404e28977c0bd97b532e
+        imagePullPolicy: Always
+        name: phpinfo
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+status:
+  observedGeneration: 2
+  replicas: 1
