@@ -5,12 +5,9 @@ metadata:
     description: An example PHP application that returns phpinfo()
     iconClass: icon-php
     tags: instant-app,php,
-  creationTimestamp: 2015-11-30T01:18:18Z
+  creationTimestamp: null
   name: phpinfo
   namespace: phpinfo
-  resourceVersion: "46501"
-  selfLink: /oapi/v1/namespaces/phpinfo/templates/phpinfo
-  uid: 3d4966c1-9700-11e5-80c0-0e9114658be7
 objects:
 - apiVersion: v1
   kind: Service
