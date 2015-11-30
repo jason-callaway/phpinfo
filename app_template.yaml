@@ -91,7 +91,7 @@ objects:
           - containerPort: 80
             protocol: TCP
   strategy:
-    type: Rolling
+    type: Recreate
   triggers:
   - type: ConfigChange
   - imageChangeParams:
