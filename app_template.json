@@ -1,163 +1,155 @@
 {
-    "kind": "Template",
-    "apiVersion": "v1",
-    "metadata": {
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "phpinfo",
+    "annotations": {
+      "description": "An example PHP application that returns phpinfo()",
+      "tags": "instant-app,php,",
+      "iconClass": "icon-php"
+    }
+  },
+  "objects": [
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
         "name": "phpinfo",
-        "creationTimestamp": null,
         "annotations": {
-            "name": "phpinfo",
-            "description": "Eclipse Developer Day Demo",
-            "provider": "Jason Callaway",
-            "iconClass": "icon-php",
-            "tags": "instant-app,php"
+          "description": "Exposes and load balances the application pods"
         }
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "web",
+            "port": 8080,
+            "targetPort": 80
+          }
+        ],
+        "selector": {
+          "name": "phpinfo"
+        }
+      }
     },
-    "parameters": [
-        {
-            "description": "GitHub webhook secret",
-            "from": "[a-zA-Z0-9_]{16}",
-            "generate": "expression",
-            "name": "GITHUB_WEBHOOK_SECRET"
-        }
-    ],
-    "objects": [
-        {
-            "kind": "ImageStream",
-            "apiVersion": "v1",
-            "metadata": {
-                "name": "phpinfo",
-                "labels": {
-                    "servicegroup": "phpinfo"
-                },
-                "creationTimestamp": null
+    {
+      "kind": "Route",
+      "apiVersion": "v1",
+      "metadata": {
+          "name": "phpinfo",
+          "creationTimestamp": null
+      },
+      "spec": {
+          "host": "",
+          "to": {
+              "kind": "Service",
+              "name": "phpinfo"
+          }
+      },
+      "status": {}
+    },
+    {
+      "kind": "ImageStream",
+      "apiVersion": "v1",
+      "metadata": {
+          "name": "phpinfo"
+      },
+      "spec": {
+        "dockerImageRepository": "docker.io/jasoncallaway/phpinfo",
+        "tags": [
+          {
+            "name": "0.2",
+            "annotations": {
+                "description": "Example PHP application that returns phpinfo",
+                "iconClass": "icon-php"
             },
-            "spec": {},
-            "status": {
-                "dockerImageRepository": "hub.docker.com/jasoncallaway/phpinfo"
+            "from": {
+                "kind": "ImageStreamTag",
+                "name": "latest"
             }
-        },
-        {
-            "kind": "DeploymentConfig",
-            "apiVersion": "v1",
-            "metadata": {
+          },
+          {
+            "name": "latest"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "BuildConfig",
+      "apiVersion": "v1",
+      "metadata": {
+          "name": "phpinfo",
+          "labels": {
+              "servicegroup": "phpinfo"
+          },
+          "creationTimestamp": null
+      },
+      "spec": {
+          "triggers": [
+              {
+                  "type": "ImageChange",
+                  "imageChange": {}
+              }
+          ]
+      }
+    },
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "phpinfo"
+      },
+      "spec": {
+        "template": { 
+          "metadata": {
+            "labels": {
+              "name": "phpinfo"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
                 "name": "phpinfo",
-                "labels": {
-                    "servicegroup": "phpinfo"
-                },
-                "creationTimestamp": null
-            },
-            "spec": {
-                "strategy": {
-                    "type": "Recreate",
-                    "resources": {}
-                },
-                "triggers": [
-                    {
-                        "type": "ConfigChange"
-                    },
-                    {
-                        "type": "ImageChange",
-                        "imageChangeParams": {
-                            "automatic": true,
-                            "containerNames": [
-                                "phpinfo"
-                            ],
-                            "from": {
-                                "kind": "ImageStreamTag",
-                                "name": "phpinfo:latest"
-                            }
-                        }
-                    }
-                ],
-                "replicas": 1,
-                "selector": {
-                    "deploymentconfig": "phpinfo"
-                },
-                "template": {
-                    "metadata": {
-                        "creationTimestamp": null,
-                        "labels": {
-                            "deploymentconfig": "phpinfo"
-                        }
-                    },
-                    "spec": {
-                        "containers": [
-                            {
-                                "name": "phpinfo",
-                                "image": "phpinfo:latest",
-                                "livenessProbe": {
-                                    "httpGet": {
-                                        "path": "/status",
-                                        "port": 8080
-                                    },
-                                    "timeoutSeconds": 5,
-                                    "initialDelaySeconds": 30
-                                },
-                                "ports": [
-                                    {
-                                        "name": "phpinfotcp",
-                                        "containerPort": 80,
-                                        "protocol": "TCP"
-                                    }
-                                ],
-                                "resources": {},
-                                "terminationMessagePath": "/dev/termination-log",
-                                "imagePullPolicy": "Always",
-                                "securityContext": {
-                                    "capabilities": {},
-                                    "privileged": false
-                                }
-                            }
-                        ],
-                        "restartPolicy": "Always",
-                        "dnsPolicy": "ClusterFirst"
-                    }
-                }
-            },
-            "status": {}
-        },
-        {
-            "kind": "Service",
-            "apiVersion": "v1",
-            "metadata": {
-                "name": "phpinfo",
-                "labels": {
-                    "servicegroup": "phpinfo"
-                },
-                "creationTimestamp": null
-            },
-            "spec": {
+                "image": "phpinfo",
                 "ports": [
-                    {
-                        "name": "phpinfotcp",
-                        "protocol": "TCP",
-                        "port": 80,
-                        "targetPort": 80,
-                        "nodePort": 0
-                    }
-                ],
-                "selector": {
-                    "deploymentconfig": "phpinfo"
-                },
-                "portalIP": "",
-                "type": "ClusterIP"
-            }
+                  {
+                    "containerPort": 80,
+                    "protocol": "TCP"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "replicas": 1, 
+      "selector": {
+        "name": "phpinfo"
+      },
+      "triggers": [
+        {
+          "type": "ConfigChange" 
         },
         {
-            "kind": "Route",
-            "apiVersion": "v1",
-            "metadata": {
-                "name": "phpinfo",
-                "creationTimestamp": null
-            },
-            "spec": {
-                "host": "",
-                "to": {
-                    "kind": "Service",
-                    "name": "phpinfo"
-                }
-            },
-            "status": {}
+          "type": "ImageChange", 
+          "imageChangeParams": {
+            "automatic": true,
+            "containerNames": [
+              "phpinfo"
+            ],
+            "from": {
+              "kind": "ImageStreamTag",
+              "name": "phpinfo:latest"
+            }
+          }
         }
-    ]
+      ],
+      "strategy": { 
+        "type": "Rolling"
+      }
+    }
+  }
+
+
+  ]
 }
